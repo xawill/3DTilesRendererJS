@@ -1,4 +1,4 @@
-import { Vector3, Matrix4 } from 'three';
+import { Vector3, Matrix4, Ray } from 'three';
 
 export enum Frames {}
 export const ENU_FRAME: Frames;
@@ -16,6 +16,7 @@ export class Ellipsoid {
 	getCartographicToNormal( lat: number, lon: number, target: Vector3 ): Vector3;
 	getPositionToNormal( pos: Vector3, target: Vector3 ): Vector3;
 	getPositionToSurfacePoint( pos: Vector3, target: Vector3 ): Vector3;
+	getPositionElevation( pos: Vector3 ): number;
 
 	getEastNorthUpFrame( lat: number, lon: number, height: number, target: Matrix4 ): Matrix4;
 	getOrientedEastNorthUpFrame( lat: number, lon: number, height: number, az: number, el: number, roll: number, target: Matrix4 ): Matrix4;
@@ -39,5 +40,16 @@ export class Ellipsoid {
 		lat: number, lon: number, az: number, el: number, roll: number, height: number,
 		target: Matrix4, frame: Frames,
 	): Matrix4;
+
+	getEastNorthUpFrame( lat: number, lon: number, target: Matrix4 ): Matrix4;
+	getEastNorthUpAxes( lat: number, lon: number, vecEast: Vector3, vecNorth: Vector3, vecUp: Vector3, point?: Vector3 ): void;
+
+	intersectRay( ray: Ray, target: Vector3 ): Vector3 | null;
+
+	calculateHorizonDistance( latitude: number, elevation: number ): number;
+	calculateEffectiveRadius( latitude: number ): number;
+
+	copy( source: Ellipsoid ): Ellipsoid;
+	clone(): Ellipsoid;
 
 }
